@@ -2,8 +2,11 @@ FROM python:3.9
 
 #include files
 ADD main.py .
-ADD .env .
+# ADD .env .
 #install external dependancies
+RUN pip install pymysql
+RUN pip install python-dotenv
+RUN pip install schedule
 
 
 
