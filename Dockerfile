@@ -7,6 +7,7 @@ ADD main.py .
 RUN pip install pymysql
 RUN pip install python-dotenv
 RUN pip install schedule
+RUN pip install cryptography
 
 
 

@@ -241,13 +241,20 @@ def write_battle_data(conn, battle_data):
     cur = conn.cursor()
     for battle in battle_data:
         sql = (
-            "INSERT INTO clan_battle_history (player_tag, player_name, battle_type, battle_time, is_ladder_tournament, arena_id, arena_name, game_mode_id, game_mode_name, deck_selection, team, opponent, is_hosted_match)"
+            "INSERT INTO clan_battle_history (player_tag, player_name, battle_result, battle_type, battle_time, is_ladder_tournament, arena_id, arena_name, game_mode_id, game_mode_name, deck_selection, team, opponent, is_hosted_match)"
             "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
             "ON DUPLICATE KEY UPDATE "
                 "player_tag = player_tag"
             )
+        if (int(battle["team"]["crowns"]) > int(battle["opponent"]["crowns"])):
+            battle_result = "WIN"
+        elif (int(battle["team"]["crowns"]) < int(battle["opponent"]["crowns"])):
+            battle_result = "LOSS"
+        else:
+            battle_result = "ERROR"
         data = (battle["player_tag"],
                 battle["player_name"],
+                battle_result,
                 battle["battle_type"],
                 battle["battle_time"],
                 battle["is_ladder_tournament"],
@@ -346,12 +353,12 @@ def webscrape():
 if __name__ == "__main__":
     # ************* PRODUCTION CODE *********** #
     #run every day at 1pm
-    schedule.every().day.at("17:00").do(webscrape)
-    while True:
-        schedule.run_pending()
-        time.sleep(1)
+    #schedule.every().day.at("18:10").do(webscrape)
+    #while True:
+    #    schedule.run_pending()
+    #    time.sleep(1)
     # ************* DEVELOPMENT CODE *********** #
-    # webscrape()
+    webscrape()
 
 
 
